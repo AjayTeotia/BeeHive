@@ -72,6 +72,7 @@ const Page = ({ params }) => {
       formData: formData,
       aiResponse: aiContent,
       templateSlug: slug,
+      templateName: selectedTemplate.name,
       createdBy: user?.primaryEmailAddress?.emailAddress,
       createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
     });

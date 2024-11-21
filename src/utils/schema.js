@@ -4,6 +4,7 @@ export const AIOutput = pgTable("AIOutput", {
   id: serial("id").primaryKey(),
   formData: varchar("formData").notNull(),
   aiResponse: text("aiResponse"),
+  templateName: varchar("templateName").notNull(),
   templateSlug: varchar("templateSlug").notNull(),
   createdBy: varchar("createdBy").notNull(),
   createdAt: varchar("createdAt").notNull(),

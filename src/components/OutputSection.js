@@ -52,6 +52,15 @@ export const OutputSection = ({ aiContent }) => {
         value={editorValue}
         onChange={setEditorValue}
         placeholder="Your Result Will Appear Here..."
+        modules={{
+          toolbar: [
+            [{ header: "1" }, { header: "2" }, { font: [] }],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["bold", "italic", "underline"],
+            ["link"],
+            ["blockquote"],
+          ],
+        }}
         style={{ height: "400px" }}
       />
     </div>
