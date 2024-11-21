@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,9 +10,6 @@ export default function Home() {
         Hello, World
       </h1>
 
-      <Link href="/sign-in">
-        <Button>Sign in</Button>
-      </Link>
 
       <Link href="/dashboard">
         <Button>Dashboard</Button>

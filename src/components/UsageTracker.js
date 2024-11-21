@@ -17,9 +17,10 @@ export const UsageTracker = () => {
   const { UserSubscriptionID, setUserSubscriptionID } = useContext(
     UserSubscriptionContext
   );
-  const [maxWords, setMaxWords] = useState(10000);
+  const [maxWords, setMaxWords] = useState(10000); // Default to 10000 for non-Pro users
   const { updateCredit, setUpdateCredit } = useContext(UpdateCreditContext);
 
+  // Fetch data related to AI usage and subscription
   const GetData = async () => {
     // Get the AIOutput data for the current user
     const res = await db
@@ -27,16 +28,11 @@ export const UsageTracker = () => {
       .from(AIOutput)
       .where(eq(AIOutput.createdBy, user?.primaryEmailAddress?.emailAddress));
 
-    // If there is a response, set the subscription ID and max words for Pro plan
-    if (res) {
-      setUserSubscriptionID(res); // You may want to adjust this to store actual subscription data
-      setMaxWords(100000); // Assuming the user has a Pro subscription
-    }
-
-    // Calculate total usage based on the AIOutput responses
+    // Calculate total usage based on AIOutput responses
     GetTotalUsage(res);
   };
 
+  // Calculate the total usage based on responses
   const GetTotalUsage = (res) => {
     let total = 0;
 
@@ -50,6 +46,7 @@ export const UsageTracker = () => {
     setTotalUsage(total); // Update total usage
   };
 
+  // Check the subscription status of the user
   const isUserSubscribed = async () => {
     const res = await db
       .select()
@@ -58,8 +55,13 @@ export const UsageTracker = () => {
         eq(UserSubscription.email, user?.primaryEmailAddress?.emailAddress)
       );
 
-    // Set the subscription ID (you may want to store additional subscription details)
-    setUserSubscriptionID(res.length > 0 ? res[0].id : null);
+    // If a user has a Pro subscription, set maxWords to 100000
+    if (res.length > 0) {
+      setMaxWords(100000); // Set maxWords for Pro users
+      setUserSubscriptionID(res[0].id); // Store subscription ID (optional)
+    } else {
+      setMaxWords(10000); // Default to 10,000 credits for non-Pro users
+    }
   };
 
   useEffect(() => {
@@ -84,9 +86,9 @@ export const UsageTracker = () => {
             style={{
               width:
                 totalUsage && maxWords
-                  ? (totalUsage / maxWords) * 100 + "%"
+                  ? (totalUsage / maxWords) * 100 + "%" // Calculate the width based on totalUsage and maxWords
                   : "0%",
-            }} // Calculate width based on totalUsage and maxWords
+            }}
           ></div>
         </div>
 
