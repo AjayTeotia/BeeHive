@@ -5,8 +5,9 @@ import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 
-export const FormSection = ({ selectedTemplate, userFormInput }) => {
+export const FormSection = ({ selectedTemplate, userFormInput, loading }) => {
   const [formData, setFormData] = useState();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -63,8 +64,16 @@ export const FormSection = ({ selectedTemplate, userFormInput }) => {
           );
         })}
 
-        <Button type="submit" className="py-5 w-full">
-          Generate Content
+        <Button
+          type="submit"
+          className="py-5 w-full flex items-center justify-center"
+          disabled={loading}
+        >
+          {loading ? (
+            <Loader2Icon className="animate-spin" />
+          ) : (
+            "Generate Content"
+          )}
         </Button>
       </form>
     </div>
