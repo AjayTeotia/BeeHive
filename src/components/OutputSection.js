@@ -1,30 +1,21 @@
 "use client";
 
-require("@toast-ui/editor/dist/toastui-editor.css");
-
-import { Editor } from "@toast-ui/react-editor";
+import { useEffect, useRef, useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // import styles
 import { Button } from "./ui/button";
 import { CopyIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export const OutputSection = ({ aiContent }) => {
-  const editorRef = useRef();
+  const [editorValue, setEditorValue] = useState(
+    aiContent || "Your Result Will Appear Here..."
+  );
   const { toast } = useToast();
-
-  useEffect(() => {
-    const editorInstance = editorRef.current.getInstance();
-
-    if (typeof aiContent === "string") {
-      editorInstance.setMarkdown(aiContent);
-    } else {
-      console.error("aiContent must be a string.");
-    }
-  }, [aiContent]); // Re-run effect if aiContent changes
 
   const handleCopyClick = async () => {
     try {
-      await navigator.clipboard.writeText(aiContent);
+      await navigator.clipboard.writeText(editorValue);
       toast({
         title: "Copied!",
         description: "The content has been copied to your clipboard.",
@@ -39,6 +30,14 @@ export const OutputSection = ({ aiContent }) => {
     }
   };
 
+  useEffect(() => {
+    if (typeof aiContent === "string") {
+      setEditorValue(aiContent);
+    } else {
+      console.error("aiContent must be a string.");
+    }
+  }, [aiContent]);
+
   return (
     <div className="bg-yellow-100 shadow-lg border-2 rounded-lg">
       <div className="flex justify-between items-center p-4">
@@ -49,15 +48,11 @@ export const OutputSection = ({ aiContent }) => {
         </Button>
       </div>
 
-      <Editor
-        ref={editorRef}
-        initialValue="Your Result Will Appear Here..."
-        height="500px"
-        initialEditType="wysiwyg"
-        useCommandShortcut={true}
-        onChange={() =>
-          console.log(editorRef.current.getInstance().getMarkdown())
-        }
+      <ReactQuill
+        value={editorValue}
+        onChange={setEditorValue}
+        placeholder="Your Result Will Appear Here..."
+        style={{ height: "400px" }}
       />
     </div>
   );

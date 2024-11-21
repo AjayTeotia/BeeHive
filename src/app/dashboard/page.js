@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 const Page = () => {
   const [userSearchInput, setUserSearchInput] = useState("");
 
-  useEffect(() => {
-    console.log(userSearchInput);
-  }, [userSearchInput]);
+  // useEffect(() => {
+  //   console.log(userSearchInput);
+  // }, [userSearchInput]);
 
   return (
     <div>

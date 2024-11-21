@@ -73,7 +73,7 @@ const Page = () => {
         name: "BeeHive",
         description: "BeeHive Monthly Subscription",
         handler: async (response) => {
-          console.log(response);
+        //   console.log(response);
           if (response) {
             SaveSubscription(response?.razorpay_payment_id);
           }

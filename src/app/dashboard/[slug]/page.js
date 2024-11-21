@@ -35,7 +35,7 @@ const Page = ({ params }) => {
   const GenerateAIContent = async (formData) => {
     setLoading(true);
 
-    if (totalUsage >= 10000) {
+    if (totalUsage >= updateCredit) {
       toast({
         title: "Limit Exceeded",
         description:
@@ -49,11 +49,11 @@ const Page = ({ params }) => {
 
     const selectedPrompt = selectedTemplate?.aiPrompt;
     const FinalPrompt = JSON.stringify(formData) + ". " + selectedPrompt;
-    console.log(FinalPrompt);
+    // console.log(FinalPrompt);
 
     try {
       const res = await GenerateContentByAI.sendMessage(FinalPrompt);
-      console.log(res.response.text());
+      // console.log(res.response.text());
 
       setAIContent(res.response.text());
       await SaveInDB(formData, res.response.text(), selectedTemplate.slug);
@@ -76,7 +76,7 @@ const Page = ({ params }) => {
       createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
     });
 
-    console.log(res);
+    // console.log(res);
   };
 
   if (!selectedTemplate) {

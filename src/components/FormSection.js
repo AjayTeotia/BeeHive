@@ -18,7 +18,7 @@ export const FormSection = ({ selectedTemplate, userFormInput, loading }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(formData);
+    // console.log(formData);
 
     userFormInput(formData);
   };
