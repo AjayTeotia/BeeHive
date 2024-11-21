@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { UsageTracker } from "./UsageTracker";
 
 export const SideNav = () => {
   const path = usePathname();
@@ -40,10 +41,10 @@ export const SideNav = () => {
   ];
 
   return (
-    <div className="h-screen w-full p-5 shadow-md border-r-2">
-      <div className="flex items-center justify-center">
+    <div className="relative h-screen w-full p-5 shadow-md border-r-2">
+      <Link href="/" className="flex items-center justify-center">
         <Image src="/logo.png" alt="logo" width={120} height={100} />
-      </div>
+      </Link>
 
       <hr className="h-1 w-full rounded-full shadow-md bg-gray-200" />
 
@@ -53,7 +54,9 @@ export const SideNav = () => {
             key={item.name}
             href={item.url}
             className={`flex items-center mb-2 p-3 gap-2 hover:bg-primary hover:text-secondary rounded-full hover:font-bold transition-all ease-in-out duration-300 ${
-              path === item.url ? "bg-primary text-secondary rounded-full border-2 shadow-md" : ""
+              path === item.url
+                ? "bg-primary text-secondary rounded-full border-2 shadow-md"
+                : ""
             }`}
           >
             <item.icon className="size-7" />
@@ -61,6 +64,10 @@ export const SideNav = () => {
             <h2 className="text-lg">{item.name}</h2>
           </Link>
         ))}
+      </div>
+
+      <div className="absolute bottom-10 left-0 w-full">
+        <UsageTracker />
       </div>
     </div>
   );

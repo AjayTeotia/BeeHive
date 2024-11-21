@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/navigation";
 import Template from "@/app/(data)/Template";
 import { FormSection } from "@/components/FormSection";
 import { OutputSection } from "@/components/OutputSection";
@@ -10,14 +11,21 @@ import Link from "next/link";
 import { GenerateContentByAI } from "@/utils/AIModal";
 import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import moment from "moment";
+import { TotalUsageContext } from "@/context/total-usage-context";
+import { useToast } from "@/hooks/use-toast";
+import { UpdateCreditContext } from "@/context/update-credit-context";
 
 const Page = ({ params }) => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [aiContent, setAIContent] = useState("");
   const { user } = useUser();
+  const { totalUsage, setTotalUsage } = useContext(TotalUsageContext);
+  const { updateCredit, setUpdateCredit } = useContext(UpdateCreditContext);
+  const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     const template = Template.find((template) => template.slug === params.slug);
@@ -26,6 +34,18 @@ const Page = ({ params }) => {
 
   const GenerateAIContent = async (formData) => {
     setLoading(true);
+
+    if (totalUsage >= 10000) {
+      toast({
+        title: "Limit Exceeded",
+        description:
+          "Your usage limit has been exceeded. Please upgrade to a paid plan to continue using our services.",
+        variant: "destructive",
+      });
+      setLoading(false);
+      router.push("/dashboard/billing");
+      return;
+    }
 
     const selectedPrompt = selectedTemplate?.aiPrompt;
     const FinalPrompt = JSON.stringify(formData) + ". " + selectedPrompt;
@@ -37,6 +57,8 @@ const Page = ({ params }) => {
 
       setAIContent(res.response.text());
       await SaveInDB(formData, res.response.text(), selectedTemplate.slug);
+
+      setUpdateCredit(Date.now())
 
       setLoading(false);
     } catch (error) {

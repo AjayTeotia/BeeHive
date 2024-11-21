@@ -1,3 +1,4 @@
+import { UserButton } from "@clerk/nextjs";
 import { SearchIcon } from "lucide-react";
 
 export const Header = () => {
@@ -15,8 +16,12 @@ export const Header = () => {
 
       <div>
         <h2 className="bg-yellow-200 p-2 text-yellow-700 text-xs md:text-sm shadow-md border-2 rounded-full">
-          🔥Join MemberShip just for $4.99/month
+          🔥Join MemberShip just for ₹50/month
         </h2>
+      </div>
+
+      <div>
+        <UserButton />
       </div>
     </div>
   );
